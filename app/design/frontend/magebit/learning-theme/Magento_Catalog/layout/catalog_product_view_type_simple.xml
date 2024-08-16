@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/page_configuration.xsd">
+    <body>
+
+        <!--        Implement new attributes template -->
+        <referenceBlock name="product.info.main">
+            <block class="Magento\Catalog\Block\Product\View\Attributes" name="product.attributes.custom"
+                   template="Magento_Catalog::product/view/attributes.phtml" after="product.info.price"/>
+        </referenceBlock>
+        <referenceBlock name="product.info.addtocart">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">
+                    Magento_Catalog::product/view/addtocart_custom.phtml
+                </argument>
+            </action>
+            <arguments>
+                <argument name="availability-helper" xsi:type="object">
+                    Magebit\CustomCatalog\ViewModel\AvailabilityHelper
+                </argument>
+            </arguments>
+        </referenceBlock>
+
+        <move element="product.info.sku" destination="product.info.price"/>
+        <move element="product.info.simple" destination="product.info.addtocart"/>
+
+        <!--        Remove unused block and containers -->
+        <referenceBlock name="product.attributes.wrapper" remove="true"/>
+        <referenceContainer name="product.info.addto" remove="true"/>
+        <referenceContainer name="product.reviews.wrapper" remove="true"/>
+        <referenceBlock name="product.info.overview" remove="true"/>
+
+        <move element="product.info.upsell" destination="product.info.main" after="product.info.addtocart"/>
+    </body>
+</page>

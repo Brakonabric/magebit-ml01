@@ -1,0 +1,29 @@
+<?php
+/**
+ * @var TemplateEngineInterface $this
+ * @var Magebit\PageListWidget\Block\Widget\PageList $block
+ * @var InlineUtilInterface $csp
+ * @var Escaper $escaper
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+
+use Magento\Csp\Api\InlineUtilInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\View\TemplateEngineInterface;
+
+?>
+
+
+<h3><?= $escaper->escapeHtml($block->getTitle()) ?></h3>
+
+<?php $pages = $block->getCmsPages(); ?>
+<?php if ($pages->getSize()): ?>
+    <ul>
+        <?php foreach ($pages as $page): ?>
+            <li><a href="<?= $block->getUrl($page->getIdentifier()) ?>"><?= $escaper->escapeHtml($page->getTitle()) ?></a></li>
+        <?php endforeach; ?>
+    </ul>
+<?php else: ?>
+    <p><?= $escaper->escapeHtml(__('No pages found.')) ?></p>
+<?php endif; ?>

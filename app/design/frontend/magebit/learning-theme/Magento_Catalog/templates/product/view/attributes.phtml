@@ -1,0 +1,25 @@
+<?php
+/** @var Attributes $block */
+
+use Magento\Catalog\Block\Product\View\Attributes;
+
+$product = $block->getProduct();
+$attributes = $product->getAttributes();
+$displayedAttributes = ['dimensions', 'color', 'material'];
+$description = $product->getData("short_description");
+?>
+<div class="product-attributes-custom">
+    <ul>
+        <?php foreach ($displayedAttributes as $attributeCode): ?>
+            <?php if ($product->hasData($attributeCode)): ?>
+
+                <li>
+                    <span><strong><?= $attributes[$attributeCode]->getStoreLabel() ?></strong></span>
+                    <span><?= $attributes[$attributeCode]->getFrontend()->getValue($product) ?></span>
+                </li>
+
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+    <p class="product-short-description"><?= $description ?></p>
+</div>

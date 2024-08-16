@@ -1,0 +1,63 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Catalog\Block\Product\View;
+use Magebit\CustomCatalog\ViewModel\AvailabilityHelper;
+use Magento\Framework\Escaper;
+
+/**
+ * @var View $block
+ * @var AvailabilityHelper $helper
+ * @var Escaper $escaper
+ */
+
+$helper = $block->getData('availability-helper');
+$stockQty = $helper->getStockQty((int)$block->getProduct()->getId());
+?>
+<div class="field qty">
+    <label class="label" for="qty" hidden><?= $escaper->escapeHtml(__('Qty')) ?></label>
+    <div class="input-counter">
+        <div id="custom-qty" class="custom-qty" data-bind="scope: 'qty-counter'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+            <script type="text/x-magento-init">
+                {
+                "#custom-qty": {
+                "Magento_Ui/js/core/app": {
+                "components": {
+                "qty-counter": {
+                "component": "qty-counter",
+                "config": {
+                "qty": <?= $block->getProductDefaultQty() * 1 ?>,
+            "dataValidate": <?= json_encode($block->getQuantityValidators()) ?>
+                }
+                }
+                }
+                }
+                }
+                }
+            </script>
+        </div>
+        <div class="stock-custom-container" name="stock-custom">
+            <span class="mark-svg">
+                <img src="<?= $block->getViewFileUrl('Magento_Catalog::images/check-mark-black-outline-svgrepo-com.svg'); ?>" alt="mark">
+            </span>
+            <span class="stock-state"><?= $block->getChildHtml('product_type_data') ?></span>
+            <span class="stock-qty"><?= $stockQty ?> items available</span>
+        </div>
+    </div>
+</div>
+
+<div class="add-to-cart-btn-container">
+    <button type="submit" title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+            class="add-to-cart-btn">
+        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+    </button>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "#product_addtocart_form": {
+            "Magento_Catalog/js/validate-product": {}
+        }
+    }
+</script>
